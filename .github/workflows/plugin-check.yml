@@ -1,0 +1,57 @@
+name: Plugin checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check plugins
+    runs-on: ubuntu-latest
+    env:
+      PROTO_HOME: /tmp/proto
+      PROTO_YES: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install proto
+        uses: moonrepo/setup-toolchain@v0
+
+      - name: Check plugins
+        shell: bash
+        run: |
+          shopt -s globstar nullglob
+
+          plugin_files=(**/plugin.toml)
+          if (( ${#plugin_files[@]} == 0 )); then
+            echo "No plugin.toml files found."
+            exit 1
+          fi
+
+          for plugin_file in "${plugin_files[@]}"; do
+            plugin_id="$(basename "$(dirname "$plugin_file")")"
+
+            echo "::group::Checking plugin '$plugin_id'"
+            proto -y plugin add "$plugin_id" "file://$GITHUB_WORKSPACE/$plugin_file"
+
+            versions="$(proto -y versions "$plugin_id" --aliases)"
+            printf '%s\n' "$versions"
+
+            version="$(awk '$1 == "latest" { print $NF }' <<< "$versions")"
+            if [[ -z "$version" ]]; then
+              echo "Unable to resolve latest for $plugin_id."
+              exit 1
+            fi
+
+            proto -y install "$plugin_id" "$version"
+            echo "::endgroup::"
+          done
