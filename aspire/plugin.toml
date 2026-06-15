@@ -1,0 +1,39 @@
+name = "Aspire"
+type = "cli"
+
+[platform.linux]
+archs = ["x86_64", "aarch64"]
+download-file = "microsoft-aspire-cli-{libc}-{arch}-{version}.tgz"
+exe-path = "package/bin/aspire"
+
+[platform.macos]
+archs = ["x86_64", "aarch64"]
+download-file = "microsoft-aspire-cli-osx-{arch}-{version}.tgz"
+exe-path = "package/bin/aspire"
+
+[platform.windows]
+archs = ["x86_64", "aarch64"]
+download-file = "microsoft-aspire-cli-win-{arch}-{version}.tgz"
+exe-path = "package/bin/aspire.exe"
+
+[install]
+download-url = "https://github.com/microsoft/aspire/releases/download/v{version}-release/{download_file}"
+
+[install.arch]
+x86_64 = "x64"
+aarch64 = "arm64"
+
+[install.libc]
+gnu = "linux"
+musl = "linux-musl"
+
+[install.exes.aspire]
+primary = true
+exe-path = "package/bin/aspire"
+
+[resolve]
+git-url = "https://github.com/microsoft/aspire"
+version-pattern = "^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:-release)?$"
+
+[detect]
+version-files = [".aspire-version"]
