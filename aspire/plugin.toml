@@ -3,12 +3,12 @@ type = "cli"
 
 [platform.linux]
 archs = ["x86_64", "aarch64"]
-download-file = "aspire-cli-{libc}-{arch}-{version}.tgz"
+download-file = "aspire-cli-{libc}-{arch}-{version}.tar.gz"
 exe-path = "package/bin/aspire"
 
 [platform.macos]
 archs = ["x86_64", "aarch64"]
-download-file = "aspire-cli-osx-{arch}-{version}.tgz"
+download-file = "aspire-cli-osx-{arch}-{version}.tar.gz"
 exe-path = "package/bin/aspire"
 
 [platform.windows]
