@@ -17,7 +17,7 @@ download-file = "aspire-cli-win-{arch}-{version}.tgz"
 exe-path = "package/bin/aspire.exe"
 
 [install]
-download-url = "https://github.com/microsoft/aspire/releases/download/v{version}-release/{download_file}"
+download-url = "https://github.com/microsoft/aspire/releases/download/v{version}/{download_file}"
 
 [install.arch]
 x86_64 = "x64"
